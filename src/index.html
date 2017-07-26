@@ -1,0 +1,175 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Florida Countdown</title>
+
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> 
+    <link rel="stylesheet" href="./florida.css" />
+</head>
+<body>
+    <div class="container">
+        <div class="header clearfix">
+            <h3 class="text-muted">Optimity 2017 All-Hands Countdown</h3>
+        </div>
+
+        <div class="jumbotron">
+            <h4 class="m-t-0"><i class="fa fa-calendar-check-o"></i> We're off to Florida in...</h4>
+            <h1 id="total-days" class="display-3 text-primary">total days go here</h1>            
+            <h4>- or -</h4>
+            <h1 id="working-days" class="display-3 text-primary">weekdays go here</h1>
+                                    
+            <p class="lead m-t-20">We leave on <span id="florida-start-date"></span> 
+                and return on <span id="florida-end-date"></span></p>
+        </div>
+        <div id="precise-ctr" class="jumbotron">
+            <h4>More precisely...</h4>
+            <h4 id="precise-time">precise time goes here</h4>
+
+            <p class="m-t-20">
+                <button id="rtc-btn" class="btn btn-success" href="javascript:void(0);" role="button">Start real-time countdown</button>
+            </p>            
+        </div>
+
+        <div class="row notes text-muted">
+            <div class="col-xs-12">
+                <h4>Notes</h4>
+                <ul>                    
+                    <li>Use your browser's "View Source" function to see the JavaScript implementation</li>
+                    <li>It's a fairly crude, brute-force implementation which probably doesn't scale well</li>
+                    <li>It <strong>does not</strong> account for bank holidays! Feel free to create an 
+                        implementation for this - for example you could use 
+                        <a href="https://holidayapi.com/">HolidayAPI</a> <i class="fa fa-smile-o"></i>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>    
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <script type="text/javascript">
+        var timerId = 0; // process ID for RTC
+
+        var fsd = new Date("2017-09-07T00:00:00Z"); // florida start date
+        var fed = new Date("2017-09-11T00:00:00Z"); // florida end date
+
+        Date.prototype.addDays = function (days) {
+            var dat = new Date(this.valueOf());
+            dat.setDate(dat.getDate() + days);
+            return dat;
+        }
+
+        $(function () {
+            $('#rtc-btn').click(function () {
+                if (timerId) {
+                    stopRealTimeCountdown();
+                }
+                else {
+                    startRealTimeCountdown();
+                }
+            });
+
+            $('#florida-start-date').html(formatDate(fsd));
+            $('#florida-end-date').html(formatDate(fed));
+            showTimeRemaining();
+        });
+
+        function startRealTimeCountdown() {
+            $('#rtc-btn').html('Stop real-time countdown');
+            $('#rtc-btn').removeClass('btn-success').addClass('btn-danger');
+
+            timerId = setInterval(showTimeRemaining, 1000);
+        }
+
+        function stopRealTimeCountdown() {
+            clearInterval(timerId);
+            timerId = 0;
+
+            $('#rtc-btn').html('Start real-time countdown');
+            $('#rtc-btn').removeClass('btn-danger').addClass('btn-success');
+        }
+
+        function showTimeRemaining() {
+            var now = new Date();
+
+            if (now >= fed) {
+                $('#total-days').html('It\'s over <i class="fa fa-frown-o"></i>');
+                $('#working-days').hide();
+                $('#precise-ctr').hide();
+            }
+            else if (now < fsd) {
+                // here is the countdown
+                var days = dateDiffDays(now, fsd);
+                $('#total-days').html(days + ' days');
+
+                days = dateDiffWeekdays(now, fsd);
+                $('#working-days').html(days + ' weekdays');
+
+                var dp = dateDiffFull(now, fsd);
+                $('#precise-time').html(dp.days + ' days, ' + dp.hours + ' hours, ' +
+                    dp.minutes + ' minutes, ' + dp.seconds + ' seconds');
+            }
+            else {
+                // little easter egg...
+                $('#total-days').html('We\'re in Florida! <i class="fa fa-smile-o"></i>');
+                $('#working-days').hide();
+                $('#precise-ctr').hide();
+            }
+        }
+
+        function formatDate(dt) {
+            return dt.toLocaleDateString('en-GB', {
+                day: 'numeric',
+                month: 'short',
+                year: 'numeric'
+            });
+        }
+
+        function dateDiffFull(dt1, dt2) {
+            var diff = Math.abs(dt2 - dt1) / 1000; // difference in SECONDS
+
+            var days = Math.floor(diff / 86400); // (60 * 60 * 24) = 86400
+            diff -= days * 86400;
+
+            var hours = Math.floor(diff / 3600);
+            diff -= hours * 3600;
+
+            var minutes = Math.floor(diff / 60) % 60;
+            diff -= minutes * 60;
+
+            var seconds = Math.floor(diff % 60);
+
+            return {
+                'days': days,
+                'hours': hours,
+                'minutes': minutes,
+                'seconds': seconds                    
+            };
+        }
+
+        function dateDiffDays(dt1, dt2) {
+            var msDiff = Math.abs(dt2 - dt1);
+            return Math.floor(msDiff / (1000 * 60 * 60 * 24));
+        }
+
+        function dateDiffWeekdays(dt1, dt2) {
+            // a not very elegant brute-force approach; ok for small ranges!
+            var tmpDt = dt1;
+            var diff = 0;
+            while (tmpDt <= dt2) {                
+                if ((tmpDt.getDay() != 0) && (tmpDt.getDay() != 6)) {
+                    diff += 1;
+                }
+
+                tmpDt = tmpDt.addDays(1);
+            }
+            return diff;
+        }
+    </script>
+</body>
+</html>
