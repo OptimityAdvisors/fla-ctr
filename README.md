@@ -1,6 +1,8 @@
 # fla-ctr
 Countdown to All-Hands 2017 in Florida
 
+Used as a simple example of gulp build tasks.
+
 ## Notes
 
 * Weekdays calculation is a fairly crude, brute-force implementation which probably doesn't scale well

@@ -11,7 +11,7 @@ gulp.task('copy-html', function() {
 gulp.task('minify-css', function() {
   return gulp.src('src/*.css')
     .pipe(cleanCSS())
-    //TODO: how to update references in "dist" HTML?
+    //TODO: update references to .min in "dist" HTML
     // https://www.npmjs.com/package/gulp-html-replace
     // .pipe(rename({
     //   suffix: '.min'
@@ -20,7 +20,7 @@ gulp.task('minify-css', function() {
 });
 
 gulp.task('minify-js', function () {
-    gulp.src('./src/*.js') // path to your files
+    gulp.src('./src/*.js') 
     .pipe(uglify())
     // .pipe(rename({
     //   suffix: '.min'
