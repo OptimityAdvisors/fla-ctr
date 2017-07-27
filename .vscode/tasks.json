@@ -1,0 +1,30 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "0.1.0",
+    "command": "gulp",
+    "isShellCommand": true,
+    "args": ["--no-color"],
+    "tasks": [        
+        {
+            "taskName": "copy-html",
+            "isBuildCommand": true,
+            "showOutput":"always"
+        },
+        {
+            "taskName": "minify-css",
+            "isBuildCommand": true,
+            "showOutput":"always"
+        },
+        {
+            "taskName": "minify-js",
+            "isBuildCommand": true,
+            "showOutput":"always"
+        },
+        {
+            "taskName": "watch",
+            "isBuildCommand": true,
+            "showOutput":"always"
+        }
+    ]
+}

@@ -4,9 +4,9 @@ var fsd = new Date("2017-09-07T00:00:00Z"); // florida start date
 var fed = new Date("2017-09-11T00:00:00Z"); // florida end date
 
 Date.prototype.addDays = function (days) {
-    var dat = new Date(this.valueOf());
-    dat.setDate(dat.getDate() + days);
-    return dat;
+    var dt = new Date(this.valueOf());
+    dt.setDate(dt.getDate() + days);
+    return dt;
 }
 
 $(function () {

@@ -1,0 +1,28 @@
+{
+  "name": "fla-ctr",
+  "version": "1.0.0",
+  "description": "Florida Countdown",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OptimityAdvisors/fla-ctr.git"
+  },
+  "keywords": [
+    "all-hands",
+    "optimity",
+    "florida"
+  ],
+  "author": "Jeremy Collins",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/OptimityAdvisors/fla-ctr/issues"
+  },
+  "homepage": "https://github.com/OptimityAdvisors/fla-ctr#readme",
+  "devDependencies": {
+    "gulp-clean-css": "^3.7.0",
+    "gulp-uglify": "^3.0.0"
+  }
+}
