@@ -4,7 +4,9 @@
   "description": "Florida Countdown",
   "main": "index.html",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lite": "lite-server --config=./bs-config.json",
+    "start": "npm run lite"
   },
   "repository": {
     "type": "git",
@@ -13,7 +15,8 @@
   "keywords": [
     "all-hands",
     "optimity",
-    "florida"
+    "florida",
+    "gulp"
   ],
   "author": "Jeremy Collins",
   "license": "MIT",
@@ -22,6 +25,7 @@
   },
   "homepage": "https://github.com/OptimityAdvisors/fla-ctr#readme",
   "devDependencies": {
+    "lite-server": "^2.2.0",
     "gulp-clean-css": "^3.7.0",
     "gulp-uglify": "^3.0.0"
   }
